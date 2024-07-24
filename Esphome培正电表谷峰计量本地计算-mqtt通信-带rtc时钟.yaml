@@ -1,5 +1,5 @@
 ####################################################################################
-#   项目名称：         Esphome培正电表谷峰计量本地计算-mqtt通信-带rtc时钟
+#   项目名称：         Esphome培正电表谷峰计量本地计算
 #
 #   作者：             jjcs
 #        
@@ -77,53 +77,16 @@ web_server:
 #
 ####################################################################################
 packages:
-  common-component: !include esp32c3.yaml
-####################################################################################
-
-
-####################################################################################
-#
-#           mqtt配置
-#
-####################################################################################
-mqtt:
-  broker: 需要修改
-  port: 需要修改
-  username: 需要修改
-  password: 需要修改
-  client_id: 需要修改
-  #discovery: true
-  discovery_retain: true   #保留
-  keepalive: 15s
-  topic_prefix: 需要修改  #主题前缀
-  #log_topic: 
-  #  topic: "rural-electricity-meter/logs"
-  #  level: INFO
-  #discovery_prefix: homeassistant
-  #discovery_object_id_generator: device_name
-  #discovery_unique_id_generator: mac
+  common-component: !include esp32c3-standard.yaml
 ####################################################################################
 
 
 
 
-#最后的遗嘱
-  birth_message:
-    topic: rural-electricity-meter/birth_message
-    payload: online
-    retain: true
-  will_message:
-    topic: rural-electricity-meter/will_message
-    payload: offline
-    retain: true
-  shutdown_message:
-    topic: rural-electricity-meter/shutdown_message
-    payload: offline
-    retain: true
-  on_connect:
-    - switch.turn_on: gp12
-  on_disconnect:
-    - switch.turn_off: gp12
+
+
+
+
 
 switch:  
   - platform: output
@@ -133,9 +96,6 @@ switch:
   - platform: output
     name: "${node_name}_gpio13"
     output: 'gpio_13'
-
-
-
 
 
 output:
