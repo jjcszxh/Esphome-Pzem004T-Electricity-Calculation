@@ -1,0 +1,123 @@
+esphome:
+  on_boot:
+    then:
+      - delay: 5s
+      # read the RTC time once when the system boots
+      - ds1307.read_time:
+      - logger.log: "ds1307.read_time"
+  name: ${node_name}
+  #friendly_name: ${node_friendly_name}
+ # platformio_options:
+   # board_build.flash_mode: dio
+   # board_build.mcu: esp32c3
+
+esp32:
+  board: airm2m_core_esp32c3
+  variant: ESP32C3
+  framework:
+    type: arduino
+    version: 'latest'
+    #platform_version: '6.3.2'
+
+logger:
+  baud_rate: 0
+  level: ${node_logger_level}
+
+
+api:
+  reboot_timeout: 0s
+  encryption:
+    key: ${node_api_key}
+
+
+ota:
+  - platform: esphome
+    password: ${node_ota_password}
+
+wifi:
+  ssid: ${node_wifi_ssid}
+  password: ${node_wifi_password}   
+  manual_ip:    
+    static_ip: ${node_manual_ip_static_ip}
+    gateway: ${node_manual_ip_gateway}
+    subnet: ${node_manual_ip_subnet}
+    dns1: 223.5.5.5
+    dns2: 114.114.114.114
+  ap:
+    ssid: ${node_ap_ssid}
+    password: ${node_ap_password}
+
+captive_portal:
+
+debug:
+  update_interval: 5s
+
+
+#flash写入间隔
+preferences:
+  flash_write_interval: 3min
+
+#wifi强度
+sensor:
+  - platform: wifi_signal
+    name: ${node_sensor_wifi_signal_name}
+    update_interval: 1000s
+
+  - platform: uptime
+    name: ${node_sensor_uptime_name}
+    update_interval: 60s
+
+  - platform: internal_temperature
+    name: ${node_internal_temperature_name}
+    update_interval: 60s
+
+
+
+  - platform: debug
+    free:
+      name: ${node_debug_free_name}
+#    fragmentation:
+#      name: "Heap Fragmentation"
+    block:
+      name: ${node_debug_block_name}
+#    loop_time:
+#      name: "Loop Time"
+
+binary_sensor:
+  - platform: status
+    name: ${node_linkstatus}
+    id: id_sensor_linkstatus
+
+text_sensor:
+  - platform: version
+    name: ${node_version_name}
+    id: id_sensor_version
+    hide_timestamp: false
+    
+  - platform: wifi_info
+    ip_address:
+      name: ${node_wifi_info_ip_address_name}
+      id: id_sensor_ip
+#   bssid:
+#      name: ${node_wifi_info_bssid_name}
+#      id: id_sensor_bssid
+    mac_address:
+      name: ${node_wifi_info_mac_address_name}
+      id: id_sensor_mac
+   # dns_address:
+    #  name: ${node_wifi_dns_address_name}
+
+  - platform: debug
+    #device:
+    #  name: "Device Info"
+    reset_reason:
+      name: ${node_debug_reset_reason_name}
+
+
+switch:  
+  - platform: restart
+    name: ${node_switch_restart_name}    #重启开关
+  - platform: safe_mode                 #安全模式
+    name: ${node_switch_safe_mode_name}  
+
+
